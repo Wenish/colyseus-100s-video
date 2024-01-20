@@ -1,5 +1,5 @@
 import { Room, Client } from "@colyseus/core";
-import { MyRoomState } from "./schema/MyRoomState";
+import { MyRoomState, PlayerSchema } from "./schema/MyRoomState";
 
 export class MyRoom extends Room<MyRoomState> {
   maxClients = 4;
@@ -14,12 +14,17 @@ export class MyRoom extends Room<MyRoomState> {
     });
   }
 
-  onJoin (client: Client, options: any) {
-    console.log(client.sessionId, "joined!");
+  onJoin (client: Client, options: { color: string }) {
+    this.state.players.set(
+      client.id,
+      new PlayerSchema().assign({
+        color: options.color
+      })
+    )
   }
 
   onLeave (client: Client, consented: boolean) {
-    console.log(client.sessionId, "left!");
+    this.state.players.delete(client.id)
   }
 
   onDispose() {
