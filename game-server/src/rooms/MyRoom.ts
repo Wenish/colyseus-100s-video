@@ -5,6 +5,7 @@ export class MyRoom extends Room<MyRoomState> {
   maxClients = 4;
 
   onCreate (options: any) {
+    console.log("room", this.roomId, "creating...");
     this.setState(new MyRoomState());
 
     this.onMessage<number>("input.horizontal", (client, message) => {
@@ -17,7 +18,7 @@ export class MyRoom extends Room<MyRoomState> {
       const player = this.state.players.get(client.id)
       player.input.vertical = clamp(message, -1, 1)
     });
-    
+
     this.setSimulationInterval((deltaTime) => this.update(deltaTime));
   }
 
@@ -25,7 +26,7 @@ export class MyRoom extends Room<MyRoomState> {
     this.state.players.set(
       client.id,
       new PlayerSchema().assign({
-        color: options.color
+        color: options.color || 'green'
       })
     )
   }

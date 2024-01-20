@@ -10,7 +10,7 @@ export class PositionSchema extends Schema {
 export class InputSchema extends Schema {
   @type('number') // -1 = left / 1 = right
   horizontal = 0
-  @type('number') // -1 = down / 1 = up
+  @type('number') // -1 = up / 1 = down
   vertical = 0
 }
 
@@ -20,9 +20,9 @@ export class PlayerSchema extends Schema {
   @type(InputSchema)
   input: InputSchema = new InputSchema()
   @type('string')
-  color: string = 'green'
+  color = 'green'
 
-  moveSpeed: number = 1
+  moveSpeed: number = 200
 
   update(deltaTime: number) {
     // Calculate movement based on input and moveSpeed
