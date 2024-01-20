@@ -141,35 +141,26 @@ onMounted(async () => {
   room.value = await client.value.joinOrCreate<MyRoomState>('my_room')
   room.value.onMessage('*', () => {})
 
-  room.value.state.players.onAdd((player, key) => {
+  room.value.state.players.onAdd(async (player, key) => {
     const playerBody = Matter.Bodies.circle(player.position.x, player.position.y, 40, { isStatic: true });
     playerBody.render.fillStyle = player.color
     playerBody.label = key
     Matter.Composite.add(engine.value.world, playerBody);
 
     player.position.onChange(() => {
-      lerpPlayerBodyToPosition(player.position.x, player.position.y)
+      // lerpPlayerBodyToPosition(player.position.x, player.position.y)
     })
 
     player.onRemove(() => {
       Matter.Composite.remove(engine.value.world, playerBody);
     })
 
-    const lerpPlayerBodyToPosition = async (x: number, y: number) => {
-      const lerpDuration = 5
-      const tick = 1
-      let timeElapsed = 0
-      while (timeElapsed < lerpDuration)
-      {
-        const xLerped = lerp(playerBody.position.x, x, timeElapsed / lerpDuration)
-        const yLerped = lerp(playerBody.position.y, y, timeElapsed / lerpDuration)
-        Matter.Body.setPosition(playerBody, {
-          x: xLerped,
-          y: yLerped
+    while(player) {
+      Matter.Body.setPosition(playerBody, {
+          x: lerp(playerBody.position.x, player.position.x, 0.2),
+          y: lerp(playerBody.position.y, player.position.y, 0.2)
         })
-        timeElapsed += tick
-        await sleep(tick)
-      }
+      await (sleep(5))
     }
   })
 })
