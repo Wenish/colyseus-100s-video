@@ -23,6 +23,16 @@ export class PlayerSchema extends Schema {
   color: string = 'green'
 
   moveSpeed: number = 1
+
+  update(deltaTime: number) {
+    // Calculate movement based on input and moveSpeed
+    const horizontalMovement = this.input.horizontal * this.moveSpeed * deltaTime / 1000;
+    const verticalMovement = this.input.vertical * this.moveSpeed * deltaTime / 1000;
+
+    // Update player position
+    this.position.x += horizontalMovement;
+    this.position.y += verticalMovement;
+  }
 }
 
 export class MyRoomState extends Schema {
