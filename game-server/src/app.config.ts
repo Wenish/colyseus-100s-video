@@ -30,9 +30,17 @@ export default config({
          * Use @colyseus/playground
          * (It is not recommended to expose this route in a production environment)
          */
+
+        app.use("/", playground);
+        /*
         if (process.env.NODE_ENV !== "production") {
             app.use("/", playground);
+        } else {
+            app.use('/', (req, res) => {
+                res.sendStatus(200)
+            })
         }
+        */
 
         /**
          * Use @colyseus/monitor
